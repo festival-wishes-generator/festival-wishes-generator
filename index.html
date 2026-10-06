@@ -10,8 +10,13 @@
     <!-- Canonical URL -->
     <link rel="canonical" href="https://shubhakamna.in/" />
 
-    <!-- Tailwind CSS CDN for raw GitHub Pages fallback -->
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- React 18 & Babel Standalone CDNs for instant browser execution on GitHub Pages -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <!-- OpenGraph Social Cards -->
     <meta property="og:type" content="website" />
@@ -19,11 +24,6 @@
     <meta property="og:title" content="Shubhakamna Wishes – Diwali, Shubh Prabhat & All Festival Greetings Generator" />
     <meta property="og:description" content="Create free personalized festival greeting templates, Diwali wishes with name and photo, Shubh Prabhat quotes, and Aaj ka Panchang on shubhakamna.in." />
     <meta property="og:site_name" content="Shubhakamna.in" />
-
-    <!-- Twitter Cards -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Shubhakamna Wishes – Festival Greetings & Panchang Generator" />
-    <meta name="twitter:description" content="Personalized festival greeting templates, Shubh Prabhat quotes, and daily Panchang on shubhakamna.in." />
 
     <!-- Schema.org JSON-LD Structured Data -->
     <script type="application/ld+json">
@@ -34,17 +34,267 @@
       "url": "https://shubhakamna.in/",
       "applicationCategory": "LifestyleApplication",
       "operatingSystem": "All",
-      "description": "Personalized festival greeting templates with name and photo, Diwali wishes, Shubh Prabhat quotes, and Aaj ka Panchang.",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "INR"
-      }
+      "description": "Personalized festival greeting templates with name and photo, Diwali wishes, Shubh Prabhat quotes, and Aaj ka Panchang."
     }
     </script>
   </head>
-  <body>
+  <body class="bg-gradient-to-b from-amber-50/60 via-white to-rose-50/30 text-slate-900 min-h-screen">
     <div id="root"></div>
-    <script type="module" src="./src/main.tsx"></script>
+
+    <!-- Standalone Client Script that runs directly on GitHub Pages without build steps -->
+    <script type="text/babel">
+      const { useState, useEffect } = React;
+
+      const templates = [
+        { id: 'diwali', name: 'Diwali & Dhanteras Wishes', category: 'Festivals', defaultMessage: 'Wishing you and your family a joyous and prosperous Diwali filled with light and happiness!', gradient: 'from-amber-500 via-orange-600 to-rose-600', badge: '🪔', slug: 'diwali' },
+        { id: 'shubh-prabhat', name: 'Shubh Prabhat (Good Morning)', category: 'Daily Wishes', defaultMessage: 'May your morning be filled with divine sunshine, positivity, and boundless energy. Suprabhat!', gradient: 'from-amber-400 via-yellow-500 to-orange-500', badge: '🌅', slug: 'shubh-prabhat' },
+        { id: 'panchang', name: 'Aaj ka Panchang & Tithi', category: 'Daily Astrological', defaultMessage: 'Aaj ka Shubh Muhurat, Nakshatra, Tithi aur Vrat tyohar ki sampurn jankari.', gradient: 'from-orange-500 via-red-600 to-amber-700', badge: '🕉️', slug: 'panchang' },
+        { id: 'holi', name: 'Holi Colors Wishes', category: 'Festivals', defaultMessage: 'May your life be colored with joy, love, and laughter this Holi! Happy Holi!', gradient: 'from-pink-500 via-purple-600 to-indigo-600', badge: '🎨', slug: 'holi' },
+        { id: 'navratri', name: 'Navratri & Durga Puja', category: 'Festivals', defaultMessage: 'May Maa Durga bless you and your family with strength, wisdom, and success.', gradient: 'from-red-600 via-rose-600 to-amber-500', badge: '🔱', slug: 'navratri' },
+        { id: 'shivratri', name: 'Mahashivratri', category: 'Festivals', defaultMessage: 'Om Namah Shivay! May Lord Shiva fulfill all your prayers and bless you with inner peace.', gradient: 'from-blue-700 via-indigo-800 to-slate-900', badge: '🔱', slug: 'mahashivratri' },
+        { id: 'raksha-bandhan', name: 'Raksha Bandhan', category: 'Festivals', defaultMessage: 'Happy Raksha Bandhan! Celebrating the unbreakable bond of love and protection.', gradient: 'from-purple-600 via-pink-600 to-rose-500', badge: '🧵', slug: 'raksha-bandhan' },
+        { id: 'janmashtami', name: 'Krishna Janmashtami', category: 'Festivals', defaultMessage: 'May Lord Krishna\'s divine flute music fill your home with peace and prosperity. Happy Janmashtami!', gradient: 'from-blue-600 via-cyan-600 to-indigo-800', badge: '🦚', slug: 'janmashtami' },
+        { id: 'ganesh-chaturthi', name: 'Ganesh Chaturthi', category: 'Festivals', defaultMessage: 'Ganpati Bappa Morya! May Lord Ganesha remove all obstacles and shower success.', gradient: 'from-orange-500 via-amber-600 to-yellow-600', badge: '🐘', slug: 'ganesh-chaturthi' },
+        { id: 'makar-sankranti', name: 'Makar Sankranti & Pongal', category: 'Festivals', defaultMessage: 'Wishing you a harvest season filled with sweetness, joy, and prosperity. Happy Sankranti!', gradient: 'from-amber-500 via-yellow-600 to-orange-600', badge: '🌾', slug: 'makar-sankranti' },
+        { id: 'onam', name: 'Onam Festival', category: 'Festivals', defaultMessage: 'Happy Onam! May the spirit of Onam fill your home with happiness and abundance.', gradient: 'from-emerald-600 via-teal-600 to-green-700', badge: '🌼', slug: 'onam' },
+        { id: 'karva-chauth', name: 'Karva Chauth & Bhai Dooj', category: 'Festivals', defaultMessage: 'May the bond of love and togetherness shine bright on Karva Chauth and Bhai Dooj.', gradient: 'from-rose-600 via-pink-600 to-red-700', badge: '💖', slug: 'karva-chauth' },
+        { id: 'chhath-puja', name: 'Chhath Puja', category: 'Festivals', defaultMessage: 'May Surya Dev and Chhath Maiya bless your family with health, wealth, and happiness.', gradient: 'from-orange-600 via-amber-600 to-yellow-600', badge: '☀️', slug: 'chhath-puja' },
+        { id: 'christmas', name: 'Merry Christmas & New Year', category: 'Global Holidays', defaultMessage: 'Merry Christmas & Happy New Year! May your holiday season sparkle with joy and cheer.', gradient: 'from-red-600 via-emerald-600 to-green-700', badge: '🎄', slug: 'christmas' },
+        { id: 'eid', name: 'Eid Mubarak', category: 'Islamic Festivals', defaultMessage: 'Eid Mubarak! May this joyous occasion bring endless peace, health, and happiness to you.', gradient: 'from-emerald-600 via-teal-700 to-green-900', badge: '🌙', slug: 'eid-mubarak' },
+        { id: 'republic-day', name: 'Republic & Independence Day', category: 'National Days', defaultMessage: 'Happy Republic Day! Saluting the spirit of our proud nation and freedom fighters.', gradient: 'from-orange-500 via-white to-emerald-600', badge: '🇮🇳', slug: 'republic-day' },
+        { id: 'shubh-ratri', name: 'Shubh Ratri (Good Night)', category: 'Daily Wishes', defaultMessage: 'Shubh Ratri! May you have peaceful sleep and sweet dreams. Good night!', gradient: 'from-indigo-900 via-purple-900 to-slate-900', badge: '🌙', slug: 'shubh-ratri' },
+        { id: 'birthday', name: 'Birthday & Anniversary', category: 'Special Occasion', defaultMessage: 'Wishing you a wonderful birthday filled with love, laughter, and success in the coming year!', gradient: 'from-pink-500 via-rose-500 to-amber-500', badge: '🎂', slug: 'birthday' },
+      ];
+
+      function App() {
+        const [userName, setUserName] = useState('Ananya Sharma');
+        const [selectedTemplate, setSelectedTemplate] = useState(templates[0]);
+        const [customMessage, setCustomMessage] = useState(templates[0].defaultMessage);
+        const [searchQuery, setSearchQuery] = useState('');
+
+        const handleTemplateChange = (tpl) => {
+          setSelectedTemplate(tpl);
+          setCustomMessage(tpl.defaultMessage);
+        };
+
+        const redirectToShubhkamna = () => {
+          const encodedName = encodeURIComponent(userName);
+          const encodedMsg = encodeURIComponent(customMessage);
+          const url = `https://shubhakamna.in/${selectedTemplate.slug}/?name=${encodedName}&msg=${encodedMsg}`;
+          window.open(url, '_blank', 'noopener,noreferrer');
+        };
+
+        const filteredTemplates = templates.filter(t => 
+          t.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+          t.category.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+
+        return (
+          <div className="flex flex-col min-h-screen">
+            {/* Header */}
+            <header className="bg-white/95 backdrop-blur-md border-b border-amber-100 sticky top-0 z-50 shadow-sm">
+              <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 flex items-center justify-center text-white text-2xl shadow-md">
+                    🪔
+                  </div>
+                  <div>
+                    <span className="font-black text-xl tracking-tight bg-gradient-to-r from-amber-700 via-rose-700 to-purple-800 bg-clip-text text-transparent">
+                      Shubhakamna Wishes
+                    </span>
+                    <p className="text-[11px] text-amber-900 font-semibold hidden sm:block">
+                      Festivals, Shubh Prabhat & Panchang
+                    </p>
+                  </div>
+                </div>
+
+                <a 
+                  href="https://shubhakamna.in/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 text-xs sm:text-sm font-black text-white bg-gradient-to-r from-amber-600 via-rose-600 to-purple-700 rounded-2xl hover:opacity-95 transition-all shadow-md hover:shadow-xl"
+                >
+                  <span>Visit shubhakamna.in ↗</span>
+                </a>
+              </div>
+            </header>
+
+            {/* Hero Section */}
+            <section className="bg-gradient-to-br from-amber-600 via-rose-600 to-purple-700 text-white py-16 px-6 text-center relative overflow-hidden shadow-2xl">
+              <div className="max-w-4xl mx-auto space-y-6 relative z-10">
+                <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold uppercase border border-white/20">
+                  <span>✨ Personalized Festival Greetings Generator</span>
+                </div>
+                <h1 className="text-3xl sm:text-6xl font-black tracking-tight leading-tight">
+                  Send Wishes with Name & Photo for All Festivals
+                </h1>
+                <p className="text-base sm:text-xl text-amber-100 max-w-2xl mx-auto font-medium">
+                  Select any festival, daily <strong className="text-white">Shubh Prabhat</strong> quotes, or <strong className="text-white">Aaj ka Panchang</strong>, personalize your message, and share on <a href="https://shubhakamna.in/" target="_blank" className="underline font-bold text-white">shubhakamna.in</a>.
+                </p>
+
+                <div className="max-w-xl mx-auto pt-2">
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search festival or wish (e.g. Diwali, Prabhat, Panchang, Holi)..."
+                    className="w-full px-5 py-3.5 bg-white text-slate-900 rounded-2xl text-sm font-semibold shadow-xl focus:outline-none"
+                  />
+                </div>
+              </div>
+            </section>
+
+            {/* Main Section */}
+            <main className="max-w-7xl mx-auto px-6 py-12 space-y-16 flex-1 w-full">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                {/* Form Controls */}
+                <div className="lg:col-span-5 bg-white p-6 sm:p-8 rounded-3xl border border-amber-100 shadow-xl space-y-6">
+                  <div className="border-b border-amber-100 pb-4 flex items-center justify-between">
+                    <div>
+                      <h2 className="text-xl font-black text-slate-900">✨ Personalize Greeting</h2>
+                      <p className="text-xs text-slate-500 mt-1">Select occasion and enter your name.</p>
+                    </div>
+                    <span className="text-3xl">{selectedTemplate.badge}</span>
+                  </div>
+
+                  <div className="space-y-3">
+                    <label className="block text-xs font-bold text-slate-700 uppercase">Choose Occasion ({templates.length} Available)</label>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-h-80 overflow-y-auto pr-1">
+                      {templates.map((tpl) => (
+                        <button
+                          key={tpl.id}
+                          onClick={() => handleTemplateChange(tpl)}
+                          className={`flex items-center gap-3 p-3 rounded-2xl text-xs font-semibold border text-left transition-all ${
+                            selectedTemplate.id === tpl.id 
+                              ? 'border-amber-500 bg-amber-50 text-amber-950 shadow-md ring-2 ring-amber-500/20' 
+                              : 'border-slate-200 bg-white text-slate-700 hover:border-amber-300'
+                          }`}
+                        >
+                          <span className="text-2xl">{tpl.badge}</span>
+                          <div className="truncate">
+                            <div className="font-bold truncate">{tpl.name}</div>
+                            <div className="text-[10px] text-slate-400">{tpl.category}</div>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="block text-xs font-bold text-slate-700 uppercase">Your Name / Family Name</label>
+                    <input
+                      type="text"
+                      value={userName}
+                      onChange={(e) => setUserName(e.target.value)}
+                      placeholder="e.g. Rahul Sharma & Family"
+                      className="w-full px-4 py-3 text-sm rounded-xl border border-slate-300 font-medium"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="block text-xs font-bold text-slate-700 uppercase">Custom Message</label>
+                    <textarea
+                      rows={3}
+                      value={customMessage}
+                      onChange={(e) => setCustomMessage(e.target.value)}
+                      className="w-full px-4 py-3 text-sm rounded-xl border border-slate-300 resize-none font-medium"
+                    />
+                  </div>
+                </div>
+
+                {/* Preview Box */}
+                <div className="lg:col-span-7 space-y-6">
+                  <div className="bg-white p-6 sm:p-8 rounded-3xl border border-amber-100 shadow-xl space-y-6">
+                    <div className="flex items-center justify-between border-b border-amber-100 pb-4">
+                      <h2 className="text-xl font-black text-slate-900">Live Card Preview</h2>
+                      <span className="text-xs bg-amber-100 text-amber-900 px-3 py-1 rounded-full font-bold">
+                        shubhakamna.in/{selectedTemplate.slug}/
+                      </span>
+                    </div>
+
+                    <div className={`bg-gradient-to-br ${selectedTemplate.gradient} text-white p-8 sm:p-12 rounded-3xl shadow-2xl relative overflow-hidden flex flex-col items-center text-center space-y-6 min-h-[400px] justify-center`}>
+                      <div className="text-6xl sm:text-7xl animate-bounce drop-shadow-md">{selectedTemplate.badge}</div>
+
+                      <div className="space-y-3 max-w-lg relative z-10">
+                        <span className="text-xs uppercase tracking-widest bg-white/20 px-3 py-1 rounded-full font-bold">
+                          {selectedTemplate.category}
+                        </span>
+                        <h3 className="text-2xl sm:text-4xl font-black tracking-tight drop-shadow">
+                          {selectedTemplate.name}
+                        </h3>
+                        <p className="text-base sm:text-lg text-white/95 leading-relaxed font-medium">
+                          "{customMessage}"
+                        </p>
+                      </div>
+
+                      <div className="pt-4 border-t border-white/25 w-full flex items-center justify-between text-xs text-white/90 font-semibold relative z-10">
+                        <span>— {userName || 'Your Name'}</span>
+                        <span className="bg-black/20 px-2.5 py-1 rounded-lg">shubhakamna.in/{selectedTemplate.slug}</span>
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={redirectToShubhkamna}
+                      className="w-full bg-gradient-to-r from-amber-600 via-rose-600 to-purple-700 hover:opacity-95 text-white font-black py-4 px-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all flex items-center justify-center gap-3 text-base"
+                    >
+                      <span>Create Wish on shubhakamna.in/{selectedTemplate.slug}/ ↗</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Grid Showcase */}
+              <div className="space-y-8 pt-6">
+                <div className="text-center max-w-2xl mx-auto space-y-2">
+                  <h2 className="text-3xl font-black text-slate-900">Explore All Festivals & Categories</h2>
+                  <p className="text-sm text-slate-600">Click any card to open its dedicated page on shubhakamna.in.</p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {filteredTemplates.map((tpl) => (
+                    <article 
+                      key={tpl.id} 
+                      onClick={() => handleTemplateChange(tpl)}
+                      className="bg-white p-6 rounded-3xl border border-amber-100 shadow-md flex flex-col justify-between space-y-5 hover:shadow-xl transition-all cursor-pointer"
+                    >
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                          <span className="text-3xl">{tpl.badge}</span>
+                          <span className="text-xs bg-amber-50 text-amber-800 px-2.5 py-1 rounded-full font-bold">{tpl.category}</span>
+                        </div>
+                        <h3 className="text-lg font-black text-slate-900">{tpl.name}</h3>
+                        <p className="text-xs text-slate-600 leading-relaxed font-medium">{tpl.defaultMessage}</p>
+                      </div>
+                      <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
+                        <span className="text-[11px] text-slate-400 font-mono">/{tpl.slug}/</span>
+                        <a 
+                          href={`https://shubhakamna.in/${tpl.slug}/`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className="text-xs font-bold text-rose-600 hover:text-rose-700"
+                        >
+                          Open Page ↗
+                        </a>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              </div>
+            </main>
+
+            {/* Footer */}
+            <footer className="bg-white border-t border-amber-100 text-center py-10 text-xs text-slate-500 space-y-3 mt-16 shadow-inner">
+              <p>© 2026 Shubhakamna Wishes. All Rights Reserved.</p>
+              <p>
+                Main Platform & Live Site: <a href="https://shubhakamna.in/" target="_blank" className="text-amber-600 font-bold hover:underline">https://shubhakamna.in/</a>
+              </p>
+            </footer>
+          </div>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
   </body>
 </html>
