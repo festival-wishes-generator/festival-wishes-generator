@@ -1,7 +1,19 @@
 {
-  "name": "react-example",
+  "name": "festival-wishes-generator",
+  "description": "Free open-source festival wishes generator, Diwali wishes with name and photo, Shubh Prabhat quotes, Aaj ka Panchang, and greeting templates.",
+  "homepage": "https://shubhakamna.in/",
+  "keywords": [
+    "festival-wishes",
+    "diwali-wishes",
+    "shubh-prabhat",
+    "aaj-ka-panchang",
+    "greeting-templates",
+    "whatsapp-wishes",
+    "personalized-wishes",
+    "shubhakamna"
+  ],
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite --port=3000 --host=0.0.0.0",

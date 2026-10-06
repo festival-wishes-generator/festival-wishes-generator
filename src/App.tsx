@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  Sparkles, ExternalLink, Sun, 
-  Calendar, ArrowRight, Check, Globe, MessageCircle, Heart, Star, Flame
+  Sparkles, ExternalLink, Search, 
+  ArrowRight, Check, Globe, MessageCircle, Heart, Star, Flame, Gift, Compass
 } from 'lucide-react';
 
 interface TemplateItem {
@@ -39,12 +39,12 @@ const templates: TemplateItem[] = [
 ];
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<'generator' | 'templates'>('generator');
   const [userName, setUserName] = useState('Ananya Sharma');
   const [selectedTemplate, setSelectedTemplate] = useState<TemplateItem>(templates[0]);
   const [customMessage, setCustomMessage] = useState(templates[0].defaultMessage);
+  const [searchQuery, setSearchQuery] = useState('');
 
-  // Dynamic SEO document title and meta tag updater for maximum Google ranking
+  // Dynamic SEO title & meta description updater
   useEffect(() => {
     document.title = selectedTemplate.seoTitle;
     const metaDesc = document.querySelector('meta[name="description"]');
@@ -56,6 +56,11 @@ export default function App() {
   const handleTemplateChange = (tpl: TemplateItem) => {
     setSelectedTemplate(tpl);
     setCustomMessage(tpl.defaultMessage);
+    // Smooth scroll to builder
+    const builderElem = document.getElementById('builder-section');
+    if (builderElem) {
+      builderElem.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   const redirectToShubhkamna = () => {
@@ -65,238 +70,242 @@ export default function App() {
     window.open(url, '_blank', 'noopener,noreferrer');
   };
 
+  const filteredTemplates = templates.filter(t => 
+    t.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+    t.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    t.seoKeyword.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-amber-50/50 via-white to-amber-50/30 text-slate-900 flex flex-col font-sans">
-      {/* Hidden SEO Header for Crawlers */}
+    <div className="min-h-screen bg-gradient-to-b from-amber-50/60 via-white to-rose-50/30 text-slate-900 flex flex-col font-sans">
+      {/* Hidden Crawler Title */}
       <h1 className="sr-only">Shubhakamna Wishes – Festival Greetings Generator, Shubh Prabhat & Panchang Today</h1>
 
-      {/* Top Navigation Bar */}
-      <header className="bg-white/90 backdrop-blur-md border-b border-amber-100 sticky top-0 z-50 shadow-xs">
-        <div className="max-w-7xl mx-auto px-6 h-18 flex items-center justify-between">
+      {/* Top Header Navigation */}
+      <header className="bg-white/95 backdrop-blur-md border-b border-amber-100 sticky top-0 z-50 shadow-xs">
+        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-rose-600 flex items-center justify-center text-white text-xl shadow-md">
+            <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 flex items-center justify-center text-white text-2xl shadow-md">
               🪔
             </div>
             <div>
-              <span className="font-extrabold text-lg tracking-tight bg-gradient-to-r from-amber-700 to-rose-700 bg-clip-text text-transparent">
+              <span className="font-black text-xl tracking-tight bg-gradient-to-r from-amber-700 via-rose-700 to-purple-800 bg-clip-text text-transparent">
                 Shubhakamna Wishes
               </span>
-              <span className="hidden sm:inline-block ml-2 text-xs bg-amber-100 text-amber-900 px-2 py-0.5 rounded-full font-semibold">
-                All Festivals & Panchang
-              </span>
+              <p className="text-[11px] text-amber-900 font-semibold hidden sm:block">
+                Festivals, Shubh Prabhat & Panchang
+              </p>
             </div>
           </div>
-
-          <nav className="hidden md:flex items-center gap-6 text-sm font-semibold text-slate-700">
-            <button onClick={() => setActiveTab('generator')} className={`hover:text-amber-600 transition-colors ${activeTab === 'generator' ? 'text-amber-600' : ''}`}>
-              Greeting Generator
-            </button>
-            <button onClick={() => setActiveTab('templates')} className={`hover:text-amber-600 transition-colors ${activeTab === 'templates' ? 'text-amber-600' : ''}`}>
-              All Categories & Festivals ({templates.length})
-            </button>
-          </nav>
 
           <div className="flex items-center gap-3">
             <a 
               href="https://shubhakamna.in/" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2 text-xs font-bold text-white bg-gradient-to-r from-amber-600 via-rose-600 to-purple-600 rounded-xl hover:opacity-95 transition-all shadow-md hover:shadow-lg"
+              className="inline-flex items-center gap-2 px-5 py-2.5 text-xs sm:text-sm font-black text-white bg-gradient-to-r from-amber-600 via-rose-600 to-purple-700 rounded-2xl hover:opacity-95 transition-all shadow-md hover:shadow-xl transform hover:-translate-y-0.5"
             >
               <Globe className="w-4 h-4 text-amber-200" />
-              <span>Visit shubhakamna.in</span>
-              <ExternalLink className="w-3.5 h-3.5 opacity-90" />
+              <span>Visit Main Site: shubhakamna.in</span>
+              <ExternalLink className="w-4 h-4 opacity-90" />
             </a>
           </div>
         </div>
       </header>
 
-      {/* Hero Banner */}
-      <section className="bg-gradient-to-br from-amber-600 via-rose-600 to-purple-700 text-white py-16 px-6 text-center relative overflow-hidden shadow-xl">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.2),transparent_50%)]"></div>
+      {/* Hero Section */}
+      <section className="bg-gradient-to-br from-amber-600 via-rose-600 to-purple-700 text-white py-16 px-6 text-center relative overflow-hidden shadow-2xl">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.2),transparent_50%)] pointer-events-none"></div>
         <div className="max-w-4xl mx-auto space-y-6 relative z-10">
           <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold tracking-wide uppercase border border-white/20 shadow-inner">
             <Sparkles className="w-4 h-4 text-amber-300 animate-pulse" />
-            <span>All Festivals, Shubh Prabhat & Daily Panchang Hub</span>
+            <span>Personalized Festival Greetings Generator</span>
           </div>
-          <h2 className="text-3xl sm:text-6xl font-black tracking-tight leading-tight">
-            Festival Wishes, Shubh Prabhat & Panchang Templates
+          <h2 className="text-3xl sm:text-6xl font-black tracking-tight leading-tight drop-shadow-sm">
+            Send Wishes with Name & Photo for All Festivals
           </h2>
           <p className="text-base sm:text-xl text-amber-100 max-w-2xl mx-auto font-medium leading-relaxed">
-            Create personalized greeting templates with name and photo for all Indian festivals, daily <strong className="text-white">Shubh Prabhat</strong> quotes, and <strong className="text-white">Aaj ka Panchang</strong> on <a href="https://shubhakamna.in/" target="_blank" rel="noopener noreferrer" className="underline font-bold text-white hover:text-amber-200">shubhakamna.in</a>.
+            Choose any festival, daily <strong className="text-white">Shubh Prabhat</strong> quotes, or <strong className="text-white">Aaj ka Panchang</strong>, personalize your message, and share with your loved ones on <a href="https://shubhakamna.in/" target="_blank" rel="noopener noreferrer" className="underline font-bold text-white hover:text-amber-200">shubhakamna.in</a>.
           </p>
 
-          <div className="flex flex-wrap justify-center gap-3 pt-2 text-xs font-semibold text-amber-100">
-            <span className="bg-white/10 px-3 py-1 rounded-lg">🪔 All Festivals</span>
-            <span className="bg-white/10 px-3 py-1 rounded-lg">🌅 Shubh Prabhat</span>
-            <span className="bg-white/10 px-3 py-1 rounded-lg">🕉️ Aaj ka Panchang</span>
-            <span className="bg-white/10 px-3 py-1 rounded-lg">💖 Birthday & Suvichar</span>
+          {/* Search Input Filter */}
+          <div className="max-w-xl mx-auto pt-2">
+            <div className="relative">
+              <Search className="w-5 h-5 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search festival or wish (e.g. Diwali, Prabhat, Panchang, Holi)..."
+                className="w-full pl-12 pr-4 py-3.5 bg-white text-slate-900 rounded-2xl text-sm font-semibold shadow-xl focus:outline-none focus:ring-4 focus:ring-amber-300/50"
+              />
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Mobile Tab Navigation */}
-      <div className="md:hidden flex bg-white border-b border-slate-200 overflow-x-auto px-4 py-2.5 gap-2 shadow-xs">
-        <button onClick={() => setActiveTab('generator')} className={`px-3 py-1.5 text-xs font-semibold rounded-lg whitespace-nowrap ${activeTab === 'generator' ? 'bg-amber-600 text-white' : 'bg-slate-100 text-slate-700'}`}>Generator</button>
-        <button onClick={() => setActiveTab('templates')} className={`px-3 py-1.5 text-xs font-semibold rounded-lg whitespace-nowrap ${activeTab === 'templates' ? 'bg-amber-600 text-white' : 'bg-slate-100 text-slate-700'}`}>All Categories</button>
-      </div>
-
-      {/* Main Content Area */}
-      <main className="max-w-7xl mx-auto px-6 py-12 flex-1 w-full">
-        {activeTab === 'generator' && (
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            {/* Left Column: Controls */}
-            <div className="lg:col-span-5 bg-white p-6 sm:p-8 rounded-3xl border border-amber-100 shadow-xl space-y-6">
-              <div className="border-b border-amber-100 pb-4">
+      {/* Main Interactive Section */}
+      <main className="max-w-7xl mx-auto px-6 py-12 space-y-16 flex-1 w-full">
+        {/* Interactive Builder */}
+        <section id="builder-section" className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* Controls Form */}
+          <div className="lg:col-span-5 bg-white p-6 sm:p-8 rounded-3xl border border-amber-100 shadow-xl space-y-6">
+            <div className="border-b border-amber-100 pb-4 flex items-center justify-between">
+              <div>
                 <h3 className="text-xl font-black text-slate-900 flex items-center gap-2">
-                  <span>✨ Configure Greeting Template</span>
+                  <span>✨ Personalize Your Greeting</span>
                 </h3>
-                <p className="text-xs text-slate-500 mt-1">Select from all categories & festivals, customize message, and open exact matching page on shubhakamna.in.</p>
+                <p className="text-xs text-slate-500 mt-1">Select occasion and enter your name.</p>
               </div>
+              <span className="text-2xl">{selectedTemplate.badge}</span>
+            </div>
 
-              {/* Template Selector */}
-              <div className="space-y-3">
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">Select Festival / Category ({templates.length} Categories)</label>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-h-80 overflow-y-auto pr-1">
-                  {templates.map((tpl) => (
-                    <button
-                      key={tpl.id}
-                      onClick={() => handleTemplateChange(tpl)}
-                      className={`flex items-center gap-3 p-3 rounded-2xl text-xs font-semibold border text-left transition-all ${
-                        selectedTemplate.id === tpl.id 
-                          ? 'border-amber-500 bg-amber-50/70 text-amber-950 shadow-md ring-2 ring-amber-500/20' 
-                          : 'border-slate-200 bg-white text-slate-700 hover:border-amber-300'
-                      }`}
-                    >
-                      <span className="text-2xl">{tpl.badge}</span>
-                      <div className="truncate">
-                        <div className="font-bold truncate">{tpl.name}</div>
-                        <div className="text-[10px] text-slate-400">{tpl.category}</div>
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Your Name */}
-              <div className="space-y-2">
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">Your Name or Sender Name</label>
-                <input
-                  type="text"
-                  value={userName}
-                  onChange={(e) => setUserName(e.target.value)}
-                  placeholder="e.g. Rahul Sharma & Family"
-                  className="w-full px-4 py-3 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500 font-medium"
-                />
-              </div>
-
-              {/* Greeting Message */}
-              <div className="space-y-2">
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">Greeting Message</label>
-                <textarea
-                  rows={3}
-                  value={customMessage}
-                  onChange={(e) => setCustomMessage(e.target.value)}
-                  className="w-full px-4 py-3 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500 resize-none font-medium"
-                />
+            {/* Template Selector */}
+            <div className="space-y-3">
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">Choose Occasion ({templates.length} Available)</label>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-h-80 overflow-y-auto pr-1">
+                {templates.map((tpl) => (
+                  <button
+                    key={tpl.id}
+                    onClick={() => handleTemplateChange(tpl)}
+                    className={`flex items-center gap-3 p-3 rounded-2xl text-xs font-semibold border text-left transition-all ${
+                      selectedTemplate.id === tpl.id 
+                        ? 'border-amber-500 bg-amber-50/80 text-amber-950 shadow-md ring-2 ring-amber-500/20' 
+                        : 'border-slate-200 bg-white text-slate-700 hover:border-amber-300'
+                    }`}
+                  >
+                    <span className="text-2xl">{tpl.badge}</span>
+                    <div className="truncate">
+                      <div className="font-bold truncate">{tpl.name}</div>
+                      <div className="text-[10px] text-slate-400">{tpl.category}</div>
+                    </div>
+                  </button>
+                ))}
               </div>
             </div>
 
-            {/* Right Column: Preview & Redirection */}
-            <div className="lg:col-span-7 space-y-6">
-              <div className="bg-white p-6 sm:p-8 rounded-3xl border border-amber-100 shadow-xl space-y-6">
-                <div className="flex items-center justify-between border-b border-amber-100 pb-4">
-                  <h3 className="text-xl font-black text-slate-900">Live Greeting Preview</h3>
-                  <span className="text-xs bg-amber-100 text-amber-900 px-3 py-1 rounded-full font-bold">
-                    shubhakamna.in/{selectedTemplate.slug}/
+            {/* Your Name */}
+            <div className="space-y-2">
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">Your Name or Family Name</label>
+              <input
+                type="text"
+                value={userName}
+                onChange={(e) => setUserName(e.target.value)}
+                placeholder="e.g. Rahul Sharma & Family"
+                className="w-full px-4 py-3 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500 font-medium"
+              />
+            </div>
+
+            {/* Greeting Message */}
+            <div className="space-y-2">
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">Custom Greeting Message</label>
+              <textarea
+                rows={3}
+                value={customMessage}
+                onChange={(e) => setCustomMessage(e.target.value)}
+                className="w-full px-4 py-3 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500 resize-none font-medium"
+              />
+            </div>
+          </div>
+
+          {/* Card Live Preview & Action Button */}
+          <div className="lg:col-span-7 space-y-6">
+            <div className="bg-white p-6 sm:p-8 rounded-3xl border border-amber-100 shadow-xl space-y-6">
+              <div className="flex items-center justify-between border-b border-amber-100 pb-4">
+                <h3 className="text-xl font-black text-slate-900">Live Card Preview</h3>
+                <span className="text-xs bg-amber-100 text-amber-900 px-3 py-1 rounded-full font-bold">
+                  shubhakamna.in/{selectedTemplate.slug}/
+                </span>
+              </div>
+
+              {/* Card Preview Container */}
+              <div className={`bg-gradient-to-br ${selectedTemplate.gradient} text-white p-8 sm:p-12 rounded-3xl shadow-2xl relative overflow-hidden flex flex-col items-center text-center space-y-6 min-h-[400px] justify-center transition-all duration-300`}>
+                <div className="absolute -top-24 -right-24 w-72 h-72 bg-white/15 rounded-full blur-3xl pointer-events-none"></div>
+                <div className="absolute -bottom-24 -left-24 w-72 h-72 bg-black/20 rounded-full blur-3xl pointer-events-none"></div>
+
+                <div className="text-6xl sm:text-7xl animate-bounce drop-shadow-md">{selectedTemplate.badge}</div>
+
+                <div className="space-y-3 max-w-lg relative z-10">
+                  <span className="text-xs uppercase tracking-widest bg-white/20 px-3 py-1 rounded-full font-bold">
+                    {selectedTemplate.category}
                   </span>
-                </div>
-
-                {/* Card Preview Box */}
-                <div className={`bg-gradient-to-br ${selectedTemplate.gradient} text-white p-8 sm:p-12 rounded-3xl shadow-2xl relative overflow-hidden flex flex-col items-center text-center space-y-6 min-h-[400px] justify-center`}>
-                  <div className="absolute -top-24 -right-24 w-72 h-72 bg-white/15 rounded-full blur-3xl pointer-events-none"></div>
-                  <div className="absolute -bottom-24 -left-24 w-72 h-72 bg-black/20 rounded-full blur-3xl pointer-events-none"></div>
-
-                  <div className="text-6xl sm:text-7xl animate-bounce drop-shadow-md">{selectedTemplate.badge}</div>
-
-                  <div className="space-y-3 max-w-lg relative z-10">
-                    <span className="text-xs uppercase tracking-widest bg-white/20 px-3 py-1 rounded-full font-bold">
-                      {selectedTemplate.category}
-                    </span>
-                    <h4 className="text-2xl sm:text-4xl font-black tracking-tight drop-shadow">
-                      {selectedTemplate.name}
-                    </h4>
-                    <p className="text-base sm:text-lg text-white/95 leading-relaxed font-medium drop-shadow-sm">
-                      "{customMessage}"
-                    </p>
-                  </div>
-
-                  <div className="pt-4 border-t border-white/25 w-full flex items-center justify-between text-xs text-white/90 font-semibold relative z-10">
-                    <span>— {userName || 'Your Name'}</span>
-                    <span className="bg-black/20 px-2.5 py-1 rounded-lg">shubhakamna.in/{selectedTemplate.slug}</span>
-                  </div>
-                </div>
-
-                {/* Redirection Button */}
-                <div className="pt-2">
-                  <button
-                    onClick={redirectToShubhkamna}
-                    className="w-full bg-gradient-to-r from-amber-600 via-rose-600 to-purple-700 hover:opacity-95 text-white font-black py-4 px-8 rounded-2xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-3 text-base tracking-wide"
-                  >
-                    <Sparkles className="w-5 h-5 text-amber-200" />
-                    <span>Open Matching Page on shubhakamna.in/{selectedTemplate.slug}/</span>
-                    <ExternalLink className="w-5 h-5" />
-                  </button>
-                  <p className="text-center text-xs text-slate-500 mt-3">
-                    Instantly opens <strong className="text-slate-800">shubhakamna.in/{selectedTemplate.slug}/</strong> with your customized greeting.
+                  <h4 className="text-2xl sm:text-4xl font-black tracking-tight drop-shadow">
+                    {selectedTemplate.name}
+                  </h4>
+                  <p className="text-base sm:text-lg text-white/95 leading-relaxed font-medium drop-shadow-sm">
+                    "{customMessage}"
                   </p>
                 </div>
+
+                <div className="pt-4 border-t border-white/25 w-full flex items-center justify-between text-xs text-white/90 font-semibold relative z-10">
+                  <span>— {userName || 'Your Name'}</span>
+                  <span className="bg-black/20 px-2.5 py-1 rounded-lg">shubhakamna.in/{selectedTemplate.slug}</span>
+                </div>
+              </div>
+
+              {/* Action Button */}
+              <div className="pt-2">
+                <button
+                  onClick={redirectToShubhkamna}
+                  className="w-full bg-gradient-to-r from-amber-600 via-rose-600 to-purple-700 hover:opacity-95 text-white font-black py-4 px-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all flex items-center justify-center gap-3 text-base tracking-wide transform hover:-translate-y-0.5"
+                >
+                  <Sparkles className="w-5 h-5 text-amber-200" />
+                  <span>Create Wish on shubhakamna.in/{selectedTemplate.slug}/</span>
+                  <ExternalLink className="w-5 h-5" />
+                </button>
+                <p className="text-center text-xs text-slate-500 mt-3">
+                  Clicking opens <strong className="text-slate-800">shubhakamna.in/{selectedTemplate.slug}/</strong> with name and photo support.
+                </p>
               </div>
             </div>
           </div>
-        )}
+        </section>
 
-        {activeTab === 'templates' && (
-          <div className="space-y-8">
-            <div className="text-center max-w-2xl mx-auto space-y-2">
-              <h3 className="text-3xl font-black text-slate-900 tracking-tight">All Categories, Festivals, Shubh Prabhat & Panchang</h3>
-              <p className="text-sm text-slate-600">Click any card to open its exact matching category page on shubhakamna.in.</p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {templates.map((tpl) => (
-                <article key={tpl.id} className="bg-white p-6 rounded-3xl border border-amber-100 shadow-md flex flex-col justify-between space-y-5 hover:shadow-xl hover:border-amber-300 transition-all">
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-3xl">{tpl.badge}</span>
-                      <span className="text-xs bg-amber-50 text-amber-800 px-2.5 py-1 rounded-full font-bold">{tpl.category}</span>
-                    </div>
-                    <h4 className="text-lg font-black text-slate-900">{tpl.name}</h4>
-                    <p className="text-xs text-slate-600 leading-relaxed font-medium">{tpl.defaultMessage}</p>
-                  </div>
-                  <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
-                    <span className="text-[11px] text-slate-400 font-mono">Slug: /{tpl.slug}/</span>
-                    <a 
-                      href={`https://shubhakamna.in/${tpl.slug}/`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-xs font-bold text-rose-600 hover:text-rose-700 flex items-center gap-1"
-                    >
-                      <span>Open Page ↗</span>
-                    </a>
-                  </div>
-                </article>
-              ))}
-            </div>
+        {/* Category Cards Showcase */}
+        <section className="space-y-8">
+          <div className="text-center max-w-2xl mx-auto space-y-2">
+            <h3 className="text-3xl font-black text-slate-900 tracking-tight">Explore All Festivals & Daily Categories</h3>
+            <p className="text-sm text-slate-600">Select any occasion card below to open its dedicated page on shubhakamna.in.</p>
           </div>
-        )}
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredTemplates.map((tpl) => (
+              <article 
+                key={tpl.id} 
+                onClick={() => handleTemplateChange(tpl)}
+                className="bg-white p-6 rounded-3xl border border-amber-100 shadow-md flex flex-col justify-between space-y-5 hover:shadow-xl hover:border-amber-300 transition-all cursor-pointer group"
+              >
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-3xl group-hover:scale-110 transition-transform">{tpl.badge}</span>
+                    <span className="text-xs bg-amber-50 text-amber-800 px-2.5 py-1 rounded-full font-bold">{tpl.category}</span>
+                  </div>
+                  <h4 className="text-lg font-black text-slate-900 group-hover:text-amber-600 transition-colors">{tpl.name}</h4>
+                  <p className="text-xs text-slate-600 leading-relaxed font-medium">{tpl.defaultMessage}</p>
+                </div>
+                <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
+                  <span className="text-[11px] text-slate-400 font-mono">/{tpl.slug}/</span>
+                  <a 
+                    href={`https://shubhakamna.in/${tpl.slug}/`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="text-xs font-bold text-rose-600 hover:text-rose-700 flex items-center gap-1"
+                  >
+                    <span>Open Page ↗</span>
+                  </a>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
       </main>
 
       {/* Footer */}
       <footer className="bg-white border-t border-amber-100 text-center py-10 text-xs text-slate-500 space-y-3 mt-16 shadow-inner">
         <p>© 2026 Shubhakamna Wishes. All Rights Reserved.</p>
         <p>
-          Main Platform & Live Demo: <a href="https://shubhakamna.in/" target="_blank" rel="noopener noreferrer" className="text-amber-600 font-bold hover:underline">https://shubhakamna.in/</a>
+          Main Platform & Live Site: <a href="https://shubhakamna.in/" target="_blank" rel="noopener noreferrer" className="text-amber-600 font-bold hover:underline">https://shubhakamna.in/</a>
         </p>
       </footer>
     </div>
